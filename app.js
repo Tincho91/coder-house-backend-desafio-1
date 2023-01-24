@@ -1,102 +1,108 @@
+const fs = require('fs');
+
 class ProductManager {
-    constructor() {
-        this.products = [];
-    }
+    constructor(path) {
+        this.path = path;
+        this.idCounter = 0;
 
-    addProduct(title, description, price, thumbnail, code, stock) {
-        if (!title || !description || !price || !thumbnail || !code || !stock) {
-            alert("All fields are required");
-            console.error("All fields are required");
-            return;
+        if (!fs.existsSync(this.path)) {
+            fs.writeFileSync(this.path, "[]");
         }
-        if (this.products.find(product => product.code === code)) {
-            alert("Code already exists");
-            console.error("Code already exists");
-            return;
+    }
+
+    async addProduct(product) {
+        if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+            throw new Error("All fields are required");
         }
-        const id = Math.floor(Math.random() * 100000000);
-        this.products.push({
-            id,
-            title,
-            description,
-            price,
-            thumbnail,
-            code,
-            stock
-        });
-
-        alert("Product saved");
-        document.getElementById("title").value = "";
-        document.getElementById("description").value = "";
-        document.getElementById("price").value = "";
-        document.getElementById("thumbnail").value = "";
-        document.getElementById("code").value = "";
-        document.getElementById("stock").value = "";
+        let products = await this.getProducts();
+        if (products.find(p => p.code === product.code)) {
+            throw new Error("Code already exists");
+        }
+        product.id = ++this.idCounter;
+        products.push(product);
+        await this.saveProducts(products);
     }
 
-    getProducts() {
-        return this.products;
+    async getProducts() {
+        let products = JSON.parse(fs.readFileSync(this.path, 'utf8'));
+        return products;
     }
 
-    getProductById(id) {
-        return this.products.find(product => product.id === id);
+    async getProductById(id) {
+        let products = await this.getProducts();
+        return products.find(product => product.id === id);
+    }
+
+    async updateProduct(id, updatedProduct) {
+        let products = await this.getProducts();
+        let productIndex = products.findIndex(product => product.id === id);
+        products[productIndex] = updatedProduct;
+        await this.saveProducts(products);
+    }
+
+    async deleteProduct(id) {
+        let products = await this.getProducts();
+        products = products.filter(product => product.id !== id);
+        await this.saveProducts(products);
+    }
+
+    async saveProducts(products) {
+        let productsJson = JSON.stringify(products);
+        fs.writeFileSync(this.path, productsJson);
     }
 }
 
-const productManager = new ProductManager();
+const path = './products.json';
+const productManager = new ProductManager(path);
 
-const addProductButton = document.getElementById("add-product-button");
-const showAllProductsButton = document.getElementById("show-all-products-button");
-const showProductByIdButton = document.getElementById("show-product-by-id-button");
-const productListContainer = document.getElementById("product-list");
-const productIdInput = document.getElementById("product-id-input");
 
-addProductButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    const title = document.getElementById("title").value;
-    const description = document.getElementById("description").value;
-    const price = document.getElementById("price").value;
-    const thumbnail = document.getElementById("thumbnail").value;
-    const code = document.getElementById("code").value;
-    const stock = document.getElementById("stock").value;
-    productManager.addProduct(title, description, price, thumbnail, code, stock);
-});
+/*
+////TESTING////
+let product = {
+    title: "Producto 1",
+    description: "Descripción del producto 1",
+    price: 19.99,
+    thumbnail: "ruta/de/imagen.jpg",
+    code: "P02",
+    stock: 10
+};
 
-showAllProductsButton.addEventListener("click", () => {
-    productListContainer.innerHTML = "";
-    const products = productManager.getProducts();
-    for (let i = 0; i < products.length; i++) {
-        const product = products[i];
-        const productDiv = document.createElement("div");
-        productDiv.innerHTML = `<p>Title: ${product.title}</p>
-                                <p>Id: ${product.id}</p>
-                                <p>Description: ${product.description}</p>
-                                <p>Price: ${product.price}</p>
-                                <p>Thumbnail: ${product.thumbnail}</p>
-                                <p>Code: ${product.code}</p>
-                                <p>Stock: ${product.stock}</p>`;
-                                
-        productListContainer.appendChild(productDiv);
-    }
-});
+productManager.addProduct(product)
+    .then(() => console.log("Producto agregado"))
+    .catch(err => console.log(err));
 
-showProductByIdButton.addEventListener("click", () => {
-    productListContainer.innerHTML = "";
-    const productId = parseInt(document.getElementById("product-id-input").value);
-    const product = productManager.getProductById(productId);
-    if (product) {
-        const productDiv = document.createElement("div");
-        productDiv.innerHTML = `<p>Title: ${product.title}</p>
-                                <p>Id: ${product.id}</p>
-                                <p>Description: ${product.description}</p>
-                                <p>Price: ${product.price}</p>
-                                <p>Thumbnail: ${product.thumbnail}</p>
-                                <p>Code: ${product.code}</p>
-                                <p>Stock: ${product.stock}</p>`;
-        productListContainer.appendChild(productDiv);
-    } else {
-        const errorMessage = document.createElement("p");
-        errorMessage.innerHTML = "Product not found.";
-        productListContainer.appendChild(errorMessage);
-    }
-});
+
+productManager.getProducts()
+    .then(products => console.log(products))
+    .catch(err => console.log(err));
+
+// Obtener un producto por su id
+let productId = 1;
+productManager.getProductById(productId)
+    .then(product => console.log(product))
+    .catch(err => console.log(err));
+
+
+// Actualizar un producto
+let updatedProduct = {
+id: 1,
+title: "Producto 1 actualizado",
+description: "Descripción actualizada",
+price: 21.99,
+thumbnail: "ruta/de/imagen.jpg",
+code: "P01",
+stock: 12
+};
+
+
+productManager.updateProduct(productId, updatedProduct)
+    .then(() => console.log("Producto actualizado"))
+    .catch(err => console.log(err));
+
+
+    // Eliminar un producto
+
+productManager.deleteProduct(productId)
+    .then(() => console.log("Producto eliminado"))
+    .catch(err => console.log(err));
+*/
