@@ -16,11 +16,17 @@ class ProductManager {
       !product.code ||
       !product.stock
     ) {
-      throw new Error("All fields are required");
+      console.log("All fields are required");
+    }
+    if (!/^[0-9]+$/.test(product.price)) {
+      console.log("Price must be a number");
+    }
+    if (!/^[0-9]+$/.test(product.stock)) {
+      console.log("Stock must be a number");
     }
     let products = await this.getProducts();
     if (products.find((p) => p.code === product.code)) {
-      throw new Error("Code already exists");
+      console.log("Code already exists");
     }
     product.id = ++this.idCounter;
     products.push(product);
@@ -29,7 +35,7 @@ class ProductManager {
 
   async getProducts() {
     try {
-      let products = JSON.parse(await fs.readFile(this.path, "utf8"));
+      let products = JSON.parse(await fs.promises.readFile(this.path, "utf8"));
       return products;
     } catch (error) {
       console.error(error);
@@ -39,13 +45,23 @@ class ProductManager {
 
   async saveProducts(products) {
     try {
-      await fs.writeFile(this.path, JSON.stringify(products, null, 4), "utf8");
+      await fs.promises.writeFile(
+        this.path,
+        JSON.stringify(products, null, 4),
+        "utf8"
+      );
     } catch (error) {
       console.error(error);
     }
   }
 
   async updateProduct(id, title, description, price, thumbnail, code, stock) {
+    if (!/^[0-9]+$/.test(price)) {
+      console.log("Price must be a number");
+    }
+    if (!/^[0-9]+$/.test(stock)) {
+      console.log("Stock must be a number");
+    }
     let products = await this.getProducts();
     const productIndex = products.findIndex((product) => product.id === id);
     if (productIndex === -1) {
