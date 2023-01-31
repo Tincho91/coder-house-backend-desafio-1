@@ -1,8 +1,101 @@
 [
-    {"id":1,
-    "title":"Producto 1 actualizado",
-    "description":"Descripción actualizada",
-    "price":21.99,
-    "thumbnail":"ruta/de/imagen.jpg",
-    "code":"P01",
-    "stock":12}]
+    {
+        "title": "Updated Product 1",
+        "description": "This is an updated product",
+        "price": 20,
+        "thumbnail": "updated-thumbnail.jpg",
+        "code": "UPD-PRD1",
+        "stock": 200,
+        "id": 1
+    },
+    {
+        "title": "Product 3",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD3",
+        "stock": 100,
+        "id": 2
+    },
+    {
+        "title": "Product 2",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD4",
+        "stock": 100,
+        "id": 3
+    },
+    {
+        "title": "Product 4",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD2",
+        "stock": 100,
+        "id": 4
+    },
+    {
+        "title": "Product 5",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD5",
+        "stock": 100,
+        "id": 5
+    },
+    {
+        "title": "Product 6",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD6",
+        "stock": 100,
+        "id": 6
+    },
+    {
+        "title": "Product 7",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD7",
+        "stock": 100,
+        "id": 7
+    },
+    {
+        "title": "Product 8",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD8",
+        "stock": 100,
+        "id": 8
+    },
+    {
+        "title": "Product 9",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD9",
+        "stock": 100,
+        "id": 9
+    },
+    {
+        "title": "Product 10",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD10",
+        "stock": 100,
+        "id": 10
+    },
+    {
+        "title": "Product 11",
+        "description": "This is a test product",
+        "price": 10,
+        "thumbnail": "thumbnail.jpg",
+        "code": "PRD11",
+        "stock": 100,
+        "id": 11
+    }
+]
