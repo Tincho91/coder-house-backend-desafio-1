@@ -1,10 +1,19 @@
 import { promises as fs } from "fs";
 
 class ProductManager {
+
   constructor(path) {
     this.path = path;
-    this.idCounter = 0;
     this.products = [];
+  }
+
+  generateID() {
+    const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let id = "";
+    for (let i = 0; i < 5; i++) {
+        id += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return id;
   }
 
   async addProduct(product) {
@@ -28,14 +37,14 @@ class ProductManager {
     if (products.find((p) => p.code === product.code)) {
       console.log("Code already exists");
     }
-    product.id = ++this.idCounter;
+    product.id = this.generateID();
     products.push(product);
     await this.saveProducts(products);
   }
 
   async getProducts() {
     try {
-      let products = JSON.parse(await fs.promises.readFile(this.path, "utf8"));
+      let products = JSON.parse(await fs.readFile(this.path, "utf8"));
       return products;
     } catch (error) {
       console.error(error);
@@ -45,7 +54,7 @@ class ProductManager {
 
   async saveProducts(products) {
     try {
-      await fs.promises.writeFile(
+      await fs.writeFile(
         this.path,
         JSON.stringify(products, null, 4),
         "utf8"
