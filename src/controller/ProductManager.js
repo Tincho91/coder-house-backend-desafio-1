@@ -39,7 +39,7 @@ class ProductManager {
     }
     product.id = this.generateID();
     products.push(product);
-    await this.saveProducts(products);
+    await this.saveProduct(products);
   }
 
   async getProducts() {
@@ -52,8 +52,15 @@ class ProductManager {
     }
   }
 
-  async saveProducts(products) {
+  async saveProduct(product) {
     try {
+      const { title, ...rest } = product;
+      const updatedProduct = { ...rest, title, ...title };
+  
+      const products = await this.getProducts();
+      const productIndex = products.findIndex(p => p.id === product.id);
+      products[productIndex] = updatedProduct;
+  
       await fs.writeFile(
         this.path,
         JSON.stringify(products, null, 4),
@@ -84,7 +91,7 @@ class ProductManager {
     products[productIndex].code = code;
     products[productIndex].stock = stock;
     console.log("Product updated successfully");
-    await this.saveProducts(products);
+    await this.saveProduct(products);
   }
 
   async deleteProduct(id) {
@@ -92,7 +99,7 @@ class ProductManager {
     const productIndex = products.findIndex((product) => product.id === id);
     if (productIndex !== -1) {
       products.splice(productIndex, 1);
-      await this.saveProducts(products);
+      await this.saveProduct(products);
       console.log("Product deleted");
     } else {
       console.log("Product not found");
