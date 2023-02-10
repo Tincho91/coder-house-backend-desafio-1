@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 
 class ProductManager {
-
   constructor(path) {
     this.path = path;
     this.products = [];
@@ -10,36 +9,30 @@ class ProductManager {
   generateID() {
     const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let id = "";
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
         id += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return id;
   }
 
   async addProduct(product) {
-    if (
-      !product.title ||
-      !product.description ||
-      !product.price ||
-      !product.thumbnail ||
-      !product.code ||
-      !product.stock
-    ) {
-      console.log("All fields are required");
+    if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+      throw new Error("All fields are required");
     }
     if (!/^[0-9]+$/.test(product.price)) {
-      console.log("Price must be a number");
+      throw new Error("Price must be a number");
     }
     if (!/^[0-9]+$/.test(product.stock)) {
-      console.log("Stock must be a number");
+      throw new Error("Stock must be a number");
     }
     let products = await this.getProducts();
     if (products.find((p) => p.code === product.code)) {
-      console.log("Code already exists");
+      throw new Error("Code already exists");
     }
     product.id = this.generateID();
     products.push(product);
     await this.saveProduct(products);
+    return product;
   }
 
   async getProducts() {
@@ -48,19 +41,12 @@ class ProductManager {
       return products;
     } catch (error) {
       console.error(error);
-      return [];
+      throw new Error("Could not find products file");
     }
   }
 
-  async saveProduct(product) {
+  async saveProduct(products) {
     try {
-      const { title, ...rest } = product;
-      const updatedProduct = { ...rest, title, ...title };
-  
-      const products = await this.getProducts();
-      const productIndex = products.findIndex(p => p.id === product.id);
-      products[productIndex] = updatedProduct;
-  
       await fs.writeFile(
         this.path,
         JSON.stringify(products, null, 4),
@@ -68,6 +54,7 @@ class ProductManager {
       );
     } catch (error) {
       console.error(error);
+      throw new Error("Could not save products file");
     }
   }
 

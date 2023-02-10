@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Product 1",
+        "description": "This is a test product",
+        "price": 312,
+        "thumbnail": "thumbnail1.jpg",
+        "code": "PRD1",
+        "stock": 500,
+        "id": "JXNYsGPtpG"
+    },
+    {
+        "title": "Product 2 UPDATED",
+        "description": "This is a test product UPDATED",
+        "price": 325,
+        "thumbnail": "thumbnail2.jpg",
+        "code": "PRD2",
+        "stock": 659,
+        "id": "iMgD4R00tG"
+    }
+]
