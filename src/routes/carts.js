@@ -17,10 +17,13 @@ cartRoutes.get('/:cartId', async (req, res) => {
 });
 
 cartRoutes.post('/', async (req, res) => {
-  const products = req.body;
+  const products = req.body.products;
+  if (!Array.isArray(products)) {
+    return res.status(400).send({ error: 'Invalid request body. Expected an array of products.' });
+  }
   try {
     const userId = req.body.userId;
-    const cart = await cartManager.createCart(userId);
+    const cart = await cartManager.createCart(userId, products);
     res.send(cart);
   } catch (error) {
     res.status(500).send({ error: error.message });
