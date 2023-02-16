@@ -1,16 +1,29 @@
-<div>
-    <h1>Hola {{mensaje}}</h1>
-    {{> itemCounter}}
-   <p>Hola, {{user.nombre}}</p>
-   {{#if isAdmin}}
+    <h1>{{mensaje}} {{user.nombre}}!</h1>
+
+    {{#if isAdmin}}
+        <h2>Panel de Administrador</h2>
+    {{else}}
+        <h2>Panel de Usuario</h2>
+    {{/if}}
+
+    <ul>
         {{#each cursos}}
-            <div>
-                <p>{{this.numComision}}</p>
-                <p>{{this.dias}}</p>
-                <p>{{this.horario}}</p>
-            </div>
+            <li>{{numComision}} - {{dias}} - {{horario}}</li>
         {{/each}}
-   {{else}}
-    <p>No sos Admin</p>
-   {{/if}}
-</div>
+    </ul>
+
+    {{#if products}}
+        {{>productList}}
+{{else}}
+<p>No products to display</p>
+{{/if}}
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="product">Select a product image:</label>
+      <input type="file" name="product" id="product">
+      <input type="submit" value="Upload">
+    </form>
+
+
+
+

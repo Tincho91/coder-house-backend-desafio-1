@@ -7,5 +7,50 @@
         "code": "PRD1",
         "stock": 500,
         "id": "JXNYsGPtpG"
+    },
+    {
+        "title": "Product 2",
+        "description": "This is a test product",
+        "price": 124,
+        "thumbnail": "thumbnail2.jpg",
+        "code": "PRD2",
+        "stock": 500,
+        "id": "qKKUn8Vjqj"
+    },
+    {
+        "title": "Product 3",
+        "description": "This is a test product",
+        "price": 151,
+        "thumbnail": "thumbnail3.jpg",
+        "code": "PRD3",
+        "stock": 500,
+        "id": "eV7oakK2Q8"
+    },
+    {
+        "title": "Product 4",
+        "description": "This is a test product",
+        "price": 560,
+        "thumbnail": "thumbnail4.jpg",
+        "code": "PRD4",
+        "stock": 500,
+        "id": "mqvZ85UR8N"
+    },
+    {
+        "title": "Product 5",
+        "description": "This is a test product",
+        "price": 450,
+        "thumbnail": "thumbnail5.jpg",
+        "code": "PRD5",
+        "stock": 500,
+        "id": "1SCRMqqBWt"
+    },
+    {
+        "title": "Product 6",
+        "description": "This is a test product",
+        "price": 445,
+        "thumbnail": "thumbnail6.jpg",
+        "code": "PRD6",
+        "stock": 500,
+        "id": "HcKmUu3G07"
     }
 ]
