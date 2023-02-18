@@ -52,5 +52,23 @@
         "code": "PRD6",
         "stock": 500,
         "id": "HcKmUu3G07"
+    },
+    {
+        "title": "Product 7",
+        "description": "This is a test product",
+        "price": 755,
+        "thumbnail": "thumbnail7.jpg",
+        "code": "PRD7",
+        "stock": 500,
+        "id": "kGzPOq8QuG"
+    },
+    {
+        "title": "Product 8",
+        "description": "This is a test product",
+        "price": 754,
+        "thumbnail": "thumbnail8.jpg",
+        "code": "PRD8",
+        "stock": 422,
+        "id": "culqj6Qbas"
     }
 ]

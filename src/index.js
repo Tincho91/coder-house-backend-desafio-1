@@ -7,6 +7,7 @@ import { engine } from "express-handlebars";
 import * as path from "path";
 import { Server } from "socket.io";
 import fs from "fs";
+//import realTimeApp from "./routes/realTimeProducts.js";
 
 const app = express();
 const port = 8080;
@@ -17,8 +18,7 @@ const server = app.listen(port, () => {
 
 const io = new Server(server);
 
-
-//Multer
+// Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "src/public/img")
@@ -30,50 +30,38 @@ const storage = multer.diskStorage({
 
 const upload = multer ({storage: storage});
 
- 
-//Middlewares
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", path.resolve(__dirname, "./views"));
 
-
-//Socket.io
+// Socket.io
 io.on("connection", (socket) => {
-  console.log("Conexion con socket")
+  console.log("Connection with socket established");
 
   socket.on("mensaje", info => { //Captura de info de cliente
-    console.log(info)
-  })
+    console.log(info);
+  });
 
   socket.broadcast.emit("evento-admin", "Hola desde server, sos el admin");
 
   socket.emit("evento-general", "Hola a todos/as los/las usuarios/as");
 });
 
-
-//Routes
+// Routes
 app.use("/", express.static(__dirname + "/public"));
 app.use("/api/carts", cartRoutes);
 app.use("/api/products", productRoutes);
+//app.use("/realtimeproducts", realTimeApp);
 
+// Home view
 app.get("/", (req,res) => {
   const jsonContent = fs.readFileSync("src/data/products.json");
   const products = JSON.parse(jsonContent);
 
-  const user = {
-    nombre: "Martin",
-    email: "martin@martin.com",
-    role: "admin"
-  }
-
-  const cursos = [
-    {numComision: 456987, dias: "Lunes a Viernes", horario: "20 a 22"},
-    {numComision: 123654, dias: "Martes y Jueves", horario: "18 a 20"}
-  ]
-
-  res.render("home", {
+  res.render("index", {
     title: "My Server",
     mensaje: "Bienvenido",
     isAdmin: true,
@@ -82,21 +70,6 @@ app.get("/", (req,res) => {
       email: "martin@example.com",
       role: "admin"
     },
-    products
-  });
-});
-
-app.post ('/upload', upload.single('product'), (req, res) => {
-  console.log(req.file)
-  res.send("Imagen Cargada")
-});
-
-app.get("/realtimeproducts", (req, res) => {
-  const jsonContent = fs.readFileSync("src/data/products.json");
-  const products = JSON.parse(jsonContent);
-
-  res.render("realTimeProducts", {
-    title: "Real Time Products",
     products
   });
 });
