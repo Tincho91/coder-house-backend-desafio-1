@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../controller/ProductManager.js";
 
+
 const productRoutes = Router();
 const productManager = new ProductManager("src/data/products.json");
 
@@ -37,7 +38,6 @@ productRoutes.post("/", async (req, res) => {
   try {
     const newProduct = await productManager.addProduct(req.body);
     res.send(newProduct);
-    io.emit("product-added", newProduct);
   } catch (error) {
     console.error(error);
     res

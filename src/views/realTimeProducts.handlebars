@@ -1,0 +1,46 @@
+<main>
+  <div class="container">
+    <h2 class="my-3">Gestión de Productos con Websockets</h2>
+    <div class="row">
+      <div class="col">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Thumbnail</th>
+                <th>Code</th>
+                <th>Stock</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="itemTableContent">
+              {{#each products}}
+                <tr>
+                  <td>{{this.id}}</td>
+                  <td>{{this.title}}</td>
+                  <td>{{this.description}}</td>
+                  <td>{{this.price}}</td>
+                  <td>
+                    <img class="img-thumbnail" src={{this.thumbnail}} alt={{this.title}}>
+                  </td>
+                  <td>{{this.code}}</td>
+                  <td>{{this.stock}}</td>
+                  <td>
+                    <button class="btn btn-outline-primary edit-btn" data-id="{{this.id}}" data-title="{{this.title}}" data-description="{{this.description}}" data-price="{{this.price}}" data-thumbnail="{{this.thumbnail}}" data-code="{{this.code}}" data-stock="{{this.stock}}">Edit</button>
+                    <button class="btn btn-outline-danger delete-btn" data-id="{{this.id}}">Delete</button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="../static/js/realTimeProductsView.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
