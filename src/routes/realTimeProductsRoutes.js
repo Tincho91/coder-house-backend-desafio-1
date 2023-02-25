@@ -38,21 +38,26 @@ realTimeProductsRoutes.get("/", async (req, res) => {
 
     //Recivimos peticion de Agergar producto del cliente
     socket.on("addProduct", async (data) => {
-      let addProduct = await productManager.addProduct(JSON.parse(data));
-      io.sockets.emit("addProduct", {
-        messaje: addProduct,
-        products: await productManager.getProducts(),
-      });
+      try {
+        let addProduct = await productManager.addProduct(data);
+        io.sockets.emit("addProduct", {
+          message: "Product added successfully",
+          product: addProduct,
+          products: await productManager.getProducts(),
+        });
+      } catch (error) {
+        io.sockets.emit("addProduct", {
+          message: error.message,
+          products: await productManager.getProducts(),
+        });
+      }
     });
 
     //Recibimos peticion de Actualizar producto
-    socket.on("putProduct", async (data) => {
-      let updateProduct = await productManager.updateProduct(
-        data.id,
-        JSON.parse(data.info)
-      );
-      io.sockets.emit("putProduct", {
-        messaje: updateProduct,
+    socket.on("addProduct", async (data) => {
+      let addProduct = await productManager.addProduct(JSON.parse(data));
+      io.sockets.emit("addProduct", {
+        messaje: addProduct,
         products: await productManager.getProducts(),
       });
     });

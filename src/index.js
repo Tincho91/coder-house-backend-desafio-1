@@ -5,8 +5,9 @@ import realTimeProductsRoutes from "./routes/realTimeProductsRoutes.js";
 import { __dirname } from "./path.js";
 import { engine } from "express-handlebars";
 import * as path from "path";
-import fs from "fs";
 import { Server } from "socket.io";
+import ProductManager from "./controller/ProductManager.js";
+
 
 const app = express();
 
@@ -23,19 +24,20 @@ const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () =>
   console.log(`Express por Local host ${server.address().port}`)
 );
+
 export const io = new Server(server);
 
 
 // Routes
-app.use("/", express.static(__dirname + "/public"));
+app.use("/static", express.static(__dirname + "/public"));
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/static/realtimeproducts", realTimeProductsRoutes);
 
 
-app.get("/", (req,res) => {
-  const jsonContent = fs.readFileSync("src/data/products.json");
-  const products = JSON.parse(jsonContent);
+const productManager = new ProductManager("src/data/products.json");
+app.get("/static", async (req,res) => {
+  let products = await productManager.getProducts();
 
   res.render("index", {
     title: "My Server",

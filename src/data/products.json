@@ -1,14 +1,5 @@
 [
     {
-        "title": "Product 1",
-        "description": "This is a test product",
-        "price": 312,
-        "thumbnail": "thumbnail1.jpg",
-        "code": "PRD1",
-        "stock": 500,
-        "id": "JXNYsGPtpG"
-    },
-    {
         "title": "Product 2",
         "description": "This is a test product",
         "price": 124,
@@ -25,5 +16,14 @@
         "code": "PRD8",
         "stock": 422,
         "id": "c834vibRSr"
+    },
+    {
+        "title": "Product 3",
+        "description": "This is a test product",
+        "price": 721,
+        "thumbnail": "thumbnail3.jpg",
+        "code": "PRD3",
+        "stock": 421,
+        "id": "aMBrzGJOGb"
     }
 ]

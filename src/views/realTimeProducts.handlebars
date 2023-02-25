@@ -1,46 +1,131 @@
-<main>
-  <div class="container">
-    <h2 class="my-3">Gestión de Productos con Websockets</h2>
-    <div class="row">
-      <div class="col">
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Thumbnail</th>
-                <th>Code</th>
-                <th>Stock</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="itemTableContent">
-              {{#each products}}
-                <tr>
-                  <td>{{this.id}}</td>
-                  <td>{{this.title}}</td>
-                  <td>{{this.description}}</td>
-                  <td>{{this.price}}</td>
-                  <td>
-                    <img class="img-thumbnail" src={{this.thumbnail}} alt={{this.title}}>
-                  </td>
-                  <td>{{this.code}}</td>
-                  <td>{{this.stock}}</td>
-                  <td>
-                    <button class="btn btn-outline-primary edit-btn" data-id="{{this.id}}" data-title="{{this.title}}" data-description="{{this.description}}" data-price="{{this.price}}" data-thumbnail="{{this.thumbnail}}" data-code="{{this.code}}" data-stock="{{this.stock}}">Edit</button>
-                    <button class="btn btn-outline-danger delete-btn" data-id="{{this.id}}">Delete</button>
-                  </td>
-                </tr>
-              {{/each}}
-            </tbody>
-          </table>
+<div class="containerTabs">
+  <div class="tabsSelector">
+    <label class="btn btn-primary active" for="tab1">GET</label>
+    <label class="btn btn-primary" for="tab2">POST</label>
+    <label class="btn btn-primary" for="tab3">PUT</label>
+    <label class="btn btn-primary" for="tab4">DELETE</label>
+  </div>
+  <div class="tabsSelected">
+    <input type="radio" name="tabs" id="tab1" checked />
+    <div class="tabs1">
+      <h3>Consulta</h3>
+      <form class="formTabs" id="formGet">
+        <div class="mb-3">
+          <label for="getProduct" class="form-label">Id Producto</label>
+          <span class="form-text">Ingrese el ID del Producto a Consultar. Consulte vacio para ver todos los
+            Productos.</span>
+          <input type="text" class="form-control" name="idProducto" id="getProduct" />
         </div>
-      </div>
+        <div class="btnMassaje">
+          <div class="btnFormTabs">
+            <button class="btn btn-primary">Consultar</button>
+          </div>
+          <strong class="massaje" id="resGet"></strong>
+        </div>
+      </form>
+    </div>
+    <input type="radio" name="tabs" id="tab2" />
+    <div class="tabs2">
+      <h3>Agregar Producto</h3>
+      <form class="formTabs" id="formPost">
+        <div class="mb-3">
+          <label for="addProduct" class="form-label">JSON del Producto</label>
+          <span class="form-text">Puede escribir o pegar un producto en formato objeto.json</span>
+          <textarea class="form-control addProduct" name="addProduct" id="addProduct"></textarea>
+        </div>
+        <div class="btnMassaje">
+          <div class="btnFormTabs">
+            <button class="btn btn-primary">Agregar</button>
+          </div>
+          <strong class="massaje" id="resAdd"></strong>
+        </div>
+      </form>
+    </div>
+    <input type="radio" name="tabs" id="tab3" />
+    <div class="tabs3">
+      <h3>Actualizar Producto</h3>
+      <form class="formTabs" id="formPut">
+        <div class="mb-3">
+          <label for="idPutProduct" class="form-label">Id Producto</label>
+          <span class="form-text">Ingrese el ID del Producto a Actualizar</span>
+          <input type="text" class="form-control" id="idPutProduct" />
+          <span class="form-text">Puede escribir o pegar un producto en formato objeto.json</span>
+          <textarea class="form-control addProduct" name="infoPutProduct" id="infoPutProduct"></textarea>
+        </div>
+        <div class="btnMassaje">
+          <div class="btnFormTabs">
+            <button class="btn btn-primary">Actualizar</button>
+          </div>
+          <strong class="massaje" id="resPut"></strong>
+        </div>
+      </form>
+    </div>
+    <input type="radio" name="tabs" id="tab4" />
+    <div class="tabs4">
+      <h3>Eliminar Producto</h3>
+      <form class="formTabs" id="formDelete">
+        <div class="mb-3">
+          <label for="deleteProduct" class="form-label">Id Producto</label>
+          <span class="form-text">Ingrese el ID del Producto a Eliminar</span>
+          <input type="text" class="form-control" name="idProducto" id="deleteProduct" />
+        </div>
+        <div class="btnMassaje">
+          <div class="btnFormTabs">
+            <button class="btn btn-primary">Eliminar</button>
+          </div>
+          <strong class="massaje" id="resDelete"></strong>
+        </div>
+      </form>
     </div>
   </div>
-</main>
-<script src="../static/js/realTimeProductsView.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Product List</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>Title</th>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Thumbnail</th>
+            <th>Code</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="itemTableContent">
+          {{#each products}}
+          <tr>
+            <td class="itemLeft">{{this.title}}</td>
+            <td>{{this.id}}</td>
+            <td class="itemLeft">{{this.description}}</td>
+            <td>{{this.price}}</td>
+            <td class="imgConten">
+              <img class="imgTable" src="{{this.thumbnail}}" alt="{{this.title}}" />
+            </td>
+            <td>{{this.code}}</td>
+            <td>{{this.stock}}</td>
+            <td>
+              <button class="btn btn-outline-primary edit-btn" data-id="{{this.id}}" data-title="{{this.title}}"
+                data-description="{{this.description}}" data-price="{{this.price}}" data-thumbnail="{{this.thumbnail}}"
+                data-code="{{this.code}}" data-stock="{{this.stock}}">Edit</button>
+              <button class="btn btn-outline-danger delete-btn" data-id="{{this.id}}">Delete</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <button class="btn btn-primary add-product-btn">Add Product</button>
+    </div>
+  </div>
+</div>
+<script type="module" src="js/realTimeProductsView.js"></script>
