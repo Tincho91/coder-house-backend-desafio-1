@@ -2,6 +2,7 @@ import express from "express";
 import productRoutes from "./routes/products.js";
 import cartRoutes from "./routes/carts.js";
 import realTimeProductsRoutes from "./routes/realTimeProductsRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import { __dirname } from "./path.js";
 import { engine } from "express-handlebars";
 import * as path from "path";
@@ -32,6 +33,7 @@ export const io = new Server(server);
 app.use("/static", express.static(__dirname + "/public"));
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
+app.use("/static/chat", chatRoutes);
 app.use("/static/realtimeproducts", realTimeProductsRoutes);
 
 
