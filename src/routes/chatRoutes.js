@@ -1,26 +1,40 @@
 import { Router } from "express";
-import { io } from "../index.js";
 
-const chatRoutes = Router();
+const chatRoutes = (io) => {
+  const data = {
+    userId: null,
+    message: null,
+  };
 
-chatRoutes.get("/", (req,res) => {
-    io.on('connection', (socket) => {
-        console.log('A user connected');
-      
-        // Listen for chat messages
-        socket.on('chat message', (msg) => {
-          console.log('message: ' + msg);
-      
-          // Broadcast the message to all connected sockets
-          io.emit('chat message', msg);
-        });
-      
-        // Listen for disconnections
-        socket.on('disconnect', () => {
-          console.log('A user disconnected');
-        });
+  const router = Router();
+
+  router.get("/", (req, res) => {
+    io.on("connection", (socket) => {
+      console.log("User connected:", socket.id);
+
+      // Listen for setUserId events from clients
+      socket.on("setUserId", (userId) => {
+        console.log(`User ${userId} with socket id ${socket.id} logged in`);
+      });
+
+      // Listen for chat message events from clients
+      socket.on("chat message", (data) => {
+        console.log(`Message from ${data.userId}: ${data.message}`);
+
+        // Emit the chat message to all clients except the sender
+        socket.broadcast.emit("chat message", data);
+      });
+
+      // Listen for disconnect events from clients
+      socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+      });
     });
-    res.render("chat", {})
-});
+
+    res.render("chat", {});
+  });
+
+  return router;
+};
 
 export default chatRoutes;

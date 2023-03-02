@@ -1,11 +1,14 @@
 <h1>REAL TIME CHAT WITH WEBSOCKETS</h1>
 
-<div id="messages"></div>
+<div id="chat-form">
+    <h1>Chat</h1>
+    <ul class="messages"></ul>
+    <form id="message-form">
+        <input id="message-input" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+</div>
 
-<form id="message-form">
-    <input type="text" id="message-input" placeholder="Type your message here" autocomplete="off" />
-    <button>Send</button>
-</form>
 
 
 <script type="module" src="js/chat.js"></script>

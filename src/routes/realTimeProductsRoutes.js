@@ -1,6 +1,5 @@
 import { Router } from "express";
 import ProductManager from "../controller/ProductManager.js";
-import { io } from "../index.js";
 
 const realTimeProductsRoutes = Router();
 const productManager = new ProductManager("src/data/products.json");
