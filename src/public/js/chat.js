@@ -36,7 +36,7 @@ socket.on("chat message", (data) => {
   const { userId: messageUserId, message } = data;
   const li = document.createElement("li");
 
-  li.innerHTML = `<span class="user-id">${messageUserId}</span> ${message}`;
+  li.innerHTML = `<span class="user-id">${messageUserId} says:</span> ${message}`;
 
   if (messageUserId === userId) {
     li.classList.add("sent");
@@ -55,7 +55,7 @@ messageForm.addEventListener("submit", (event) => {
     socket.emit("chat message", { userId, message }); // add userId to the chat message object
     messageInput.value = "";
     const li = document.createElement("li");
-    li.innerHTML = `<span class="user-id">${userId}</span> ${message}`;
+    li.innerHTML = `${message}`;
     li.classList.add("sent");
     messages.appendChild(li);
   } else {

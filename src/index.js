@@ -33,7 +33,7 @@ export const io = new Server(server);
 app.use("/static", express.static(__dirname + "/public"));
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
-app.use("/static/chat", chatRoutes);
+app.use("/static/chat", chatRoutes(io));
 app.use("/static/realtimeproducts", realTimeProductsRoutes);
 
 
