@@ -1,8 +1,8 @@
 import { Router } from "express";
-import ProductManager from "../controller/ProductManager.js";
+import { ProductManagerMongoDB } from "../dao/MongoDB/Controllers/ProductManager.js";
 
 const realTimeProductsRoutes = Router();
-const productManager = new ProductManager("src/data/products.json");
+const productManager = new ProductManagerMongoDB();
 
 realTimeProductsRoutes.get("/", async (req, res) => {
   //Websockets
