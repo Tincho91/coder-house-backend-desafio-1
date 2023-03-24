@@ -1,6 +1,7 @@
 import "dotenv/config"
 import express from "express";
 import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 import realTimeProductsRoutes from "./routes/realTimeProductsRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import { __dirname } from "./path.js";
@@ -14,9 +15,14 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.engine("handlebars", engine());
+app.engine("handlebars", engine({
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  }
+}));
 app.set("view engine", "handlebars");
-app.set("views", path.resolve(__dirname, "./views"));
+app.set("views", path.resolve(__dirname, "views"));
 
 
 //Config
@@ -30,9 +36,9 @@ export const io = new Server(server);
 
 
 // Routes
-app.use("/static", express.static(__dirname + "/public"));
+app.use("/static", express.static(path.resolve(__dirname, "public")));
 app.use("/api/products", productRoutes);
-//app.use("/api/carts", cartRoutes);
+app.use("/api/carts", cartRoutes);
 app.use("/static/chat", chatRoutes(io));
 app.use("/static/realtimeproducts", realTimeProductsRoutes);
 //app.use("/users", userRoutes)

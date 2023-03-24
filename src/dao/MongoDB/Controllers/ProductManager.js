@@ -4,10 +4,7 @@ import { productSchema } from "../Models/Product.js";
 export class ProductManagerMongoDB extends mongoDbManager {
   constructor() {
     super(process.env.MONGODBURL, "products", productSchema);
-    // Atributos propios
   }
-
-  // Métodos Propios
 
   async addProduct(product) {
     if (
@@ -17,7 +14,6 @@ export class ProductManagerMongoDB extends mongoDbManager {
       !product.description ||
       !product.code ||
       !product.status
-
 
     ) {
       throw new Error("All fields are required");
@@ -31,8 +27,29 @@ export class ProductManagerMongoDB extends mongoDbManager {
     return await this.addElements([product]);
   }
 
-  async getProducts() {
-    return await this.getElements();
+  async getProducts(limit, page, sort, query) {
+    const queryObject = query ? this.buildQueryObject(query) : {};
+    const options = this.buildPaginationOptions(limit, page, sort);
+    const products = await this.getElements(queryObject, options);
+    const totalDocuments = await this.countElements(queryObject);
+    return { products, totalDocuments };
+  }
+
+  buildQueryObject(query) {
+    // Añade las condiciones de búsqueda según el tipo de elemento que se desee buscar
+    const queryObject = {};
+    if (query.category) queryObject.category = query.category;
+    if (query.availability) queryObject.available = query.availability === 'true';
+    return queryObject;
+  }
+
+  buildPaginationOptions(limit, page, sort) {
+    const options = {
+      limit: limit ? parseInt(limit) : 10,
+      skip: (page ? parseInt(page) - 1 : 0) * (limit ? parseInt(limit) : 10),
+      sort: sort ? { price: sort === 'asc' ? 1 : -1 } : null,
+    };
+    return options;
   }
 
   async updateProduct(id, title, description, price, thumbnail, code, stock) {

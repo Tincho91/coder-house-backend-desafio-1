@@ -7,30 +7,33 @@ const productManager = new ProductManagerMongoDB();
 
 productRoutes.get("/", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
-    res.send(products);
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .send({ error: "An error occurred while getting the products" });
-  }
-});
+    const { limit, page, sort, category, availability } = req.query;
+    const query = { category, availability };
+    const { products, totalDocuments } = await productManager.getProducts(limit, page, sort, query);
 
-productRoutes.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await productManager.getProductById(id);
-    if (!product) {
-      res.status(404).send({ error: "Product not found" });
-    } else {
-      res.send(product);
-    }
+    const totalPages = Math.ceil(totalDocuments / (limit ? parseInt(limit) : 10));
+    const currentPage = page ? parseInt(page) : 1;
+    const hasNextPage = currentPage < totalPages;
+    const hasPrevPage = currentPage > 1;
+    const nextPage = hasNextPage ? currentPage + 1 : null;
+    const prevPage = hasPrevPage ? currentPage - 1 : null;
+    const prevLink = hasPrevPage ? `/api/products?limit=${limit}&page=${prevPage}` : null;
+    const nextLink = hasNextPage ? `/api/products?limit=${limit}&page=${nextPage}` : null;
+
+    res.render("products", {
+      products,
+      totalPages,
+      prevPage,
+      nextPage,
+      currentPage,
+      hasPrevPage,
+      hasNextPage,
+      prevLink,
+      nextLink
+    });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .send({ error: "An error occurred while getting the product" });
+    res.status(500).send({ error: "An error occurred while getting the products" });
   }
 });
 

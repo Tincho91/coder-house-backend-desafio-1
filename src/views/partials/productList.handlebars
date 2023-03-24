@@ -1,24 +1,19 @@
-<div class="container mt-5">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Description</th>
-        <th scope="col">Price</th>
-        <th scope="col">Stock</th>
-        <th scope="col">Thumbnail</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each products}}
-      <tr>
-        <td>{{this.title}}</td>
-        <td>{{this.description}}</td>
-        <td>$ {{this.price}}</td>
-        <td>{{this.stock}}</td>
-        <td><img src="/img/{{this.thumbnail}}" alt="{{this.title}}" width="50"></td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+<div class="container mt-4">
+  <div class="row">
+    {{#each products}}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <img src="{{this.thumbnail}}" class="card-img-top" alt="{{this.title}}">
+        <div class="card-body">
+          <h5 class="card-title">{{this.title}}</h5>
+          <p class="card-text">{{this.description}}</p>
+          <p class="card-text">Price: ${{this.price}}</p>
+          <p class="card-text">Stock: {{this.stock}}</p>
+          <p class="card-text">Category: {{this.category}}</p>
+          <a href="/products/{{this._id}}" class="btn btn-primary">View Details</a>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
 </div>
