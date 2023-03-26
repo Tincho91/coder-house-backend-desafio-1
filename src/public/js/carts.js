@@ -16,4 +16,4 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const overallTotalElement = document.getElementById('overall-total');
     overallTotalElement.textContent = '$' + overallTotal.toFixed(2);
-  });
+});

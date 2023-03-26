@@ -18,18 +18,15 @@
             {{/each}}
           </ul>
           <div class="mt-3">
-            <strong>Total price for this cart: </strong><span class="cart-total" data-products='{{#each @products}}{{#unless @first}},{{/unless}}{{{json this}}}{{/each}}'></span>
+            <strong>Total price for this cart: </strong><span class="cart-total">${{cartTotal products}}</span>
           </div>
         </div>
       </li>
     {{/each}}
   </ul>
   <div class="mt-3">
-    <strong>Overall total: </strong><span id="overall-total"></span>
+    <strong>Overall total: </strong><span id="overall-total">${{overallTotal carts}}</span>
   </div>
 </div>
 
-<script>
-  const cartsData = {{{json this}}};
-</script>
-<script src="/js/carts.js"></script>
+<script src="/static/js/carts.js"></script>

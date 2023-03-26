@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CartManagerMongoDB } from "../dao/MongoDB/Controllers/CartManager.js";
 
+
 const cartRoutes = Router();
 const cartManager = new CartManagerMongoDB();
 
@@ -22,6 +23,27 @@ cartRoutes.post("/", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "An error occurred while creating the cart" });
+  }
+});
+
+cartRoutes.get("/:cid", async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const cart = await cartManager.getCartById(cartId);
+    const total = cart.products.reduce((sum, product) => sum + product.price, 0);
+
+    if (!cart) {
+      return res.status(404).send({ error: "Cart not found" });
+    }
+
+    res.render("cart", {
+      userEmail: cart.user.email,
+      cartProducts: cart.products,
+      total: total
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while getting the cart" });
   }
 });
 

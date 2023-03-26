@@ -22,8 +22,11 @@ app.engine("handlebars", engine({
     allowProtoMethodsByDefault: true,
   },
   helpers: {
-    json: function (context) {
-      return JSON.stringify(context);
+    cartTotal: function (products) {
+      return products.reduce((sum, product) => sum + product.quantity * product.productId.price, 0);
+    },
+    overallTotal: function (carts) {
+      return carts.reduce((sum, cart) => sum + cart.products.reduce((cartSum, product) => cartSum + product.quantity * product.productId.price, 0), 0);
     }
   }
 }));
