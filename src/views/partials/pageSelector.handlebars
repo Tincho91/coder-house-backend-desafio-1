@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-center my-3">
+  {{#if hasPrevPage}}
+    <a href="{{prevLink}}" class="btn btn-outline-primary me-2">
+      <i class="bi bi-chevron-left"></i>
+    </a>
+  {{/if}}
+
+  <div class="input-group me-2" style="max-width: 200px;">
+    <span class="input-group-text">Page</span>
+    <input
+      type="number"
+      class="form-control"
+      id="goto-page-input"
+      min="1"
+      max="{{totalPages}}"
+      value="{{currentPage}}"
+      style="text-align: center;"
+    />
+  </div>
+
+  <button type="button" class="btn btn-primary me-2" id="goto-page-btn">
+    Go
+  </button>
+
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}" class="btn btn-outline-primary">
+      <i class="bi bi-chevron-right"></i>
+    </a>
+  {{/if}}
+</div>

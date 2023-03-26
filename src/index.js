@@ -12,6 +12,7 @@ import { Server } from "socket.io";
 
 const app = express();
 
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,6 +20,11 @@ app.engine("handlebars", engine({
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true,
+  },
+  helpers: {
+    json: function (context) {
+      return JSON.stringify(context);
+    }
   }
 }));
 app.set("view engine", "handlebars");

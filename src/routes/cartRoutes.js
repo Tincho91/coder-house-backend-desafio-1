@@ -4,6 +4,27 @@ import { CartManagerMongoDB } from "../dao/MongoDB/Controllers/CartManager.js";
 const cartRoutes = Router();
 const cartManager = new CartManagerMongoDB();
 
+cartRoutes.get("/", async (req, res) => {
+  try {
+    const carts = await cartManager.getAllCarts();
+    res.render("carts", { carts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while fetching the carts" });
+  }
+});
+
+cartRoutes.post("/", async (req, res) => {
+  try {
+    const cartData = req.body;
+    const newCart = await cartManager.addCart(cartData);
+    res.status(201).send({ message: "Cart created successfully", cart: newCart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while creating the cart" });
+  }
+});
+
 cartRoutes.put("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;

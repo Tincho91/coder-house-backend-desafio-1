@@ -1,12 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Product App</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
-        </li>
-      </ul>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse pt-3" id="navbarSupportedContent">
+
       <form class="d-flex" id="sorting-form">
         <label for="limit-input" class="me-1">Limit:</label>
         <input
@@ -17,16 +16,6 @@
           min="1"
           step="1"
           value="10"
-        />
-        <label for="page-input" class="me-1">Page:</label>
-        <input
-          type="number"
-          class="form-control me-2"
-          id="page-input"
-          placeholder="Page"
-          min="1"
-          step="1"
-          value="1"
         />
         <label for="query-input" class="me-1">Query:</label>
         <input

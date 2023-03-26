@@ -1,7 +1,11 @@
 import { mongoDbManager } from "../../../database/mongoDbManager.js";
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
+import { productSchema } from "./Product.js";
 
-const cartSchema = new Schema({
+// Create the Product model
+const ProductModel = model("Product", productSchema);
+
+export const cartSchema = new Schema({
   user: {
     email: {
       type: String,
