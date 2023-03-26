@@ -12,6 +12,7 @@ export class ProductManagerMongoDB extends mongoDbManager {
       !product.price ||
       !product.stock ||
       !product.description ||
+      !product.category ||
       !product.code ||
       !product.status
 
@@ -64,6 +65,7 @@ export class ProductManagerMongoDB extends mongoDbManager {
       price,
       stock,
       description,
+      category,
       code
     };
     await this.updateElement(id, updatedProduct);

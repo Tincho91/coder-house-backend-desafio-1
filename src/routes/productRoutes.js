@@ -7,9 +7,15 @@ const productManager = new ProductManagerMongoDB();
 
 productRoutes.get("/", async (req, res) => {
   try {
-    const { limit, page, sort, category, availability } = req.query;
-    const query = { category, availability };
-    const { products, totalDocuments } = await productManager.getProducts(limit, page, sort, query);
+    const { limit, page, sort, category, availability, query } = req.query;
+    const queryObject = { category, availability };
+
+    // If there's a query, include it in the queryObject
+    if (query) {
+      queryObject.category = new RegExp(query, "i"); // Use RegExp to perform a case-insensitive search
+    }
+
+    const { products, totalDocuments } = await productManager.getProducts(limit, page, sort, queryObject);
 
     const totalPages = Math.ceil(totalDocuments / (limit ? parseInt(limit) : 10));
     const currentPage = page ? parseInt(page) : 1;
