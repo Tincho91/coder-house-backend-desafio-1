@@ -17,8 +17,7 @@ cartRoutes.get("/", async (req, res) => {
 
 cartRoutes.post("/", async (req, res) => {
   try {
-    const cartData = req.body;
-    const newCart = await cartManager.addCart(cartData);
+    const newCart = await cartManager.addCart();
     res.status(201).send({ message: "Cart created successfully", cart: newCart });
   } catch (error) {
     console.error(error);

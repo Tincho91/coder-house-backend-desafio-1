@@ -43,6 +43,19 @@ productRoutes.get("/", async (req, res) => {
   }
 });
 
+productRoutes.get("/:id", async (req, res) => {
+  try {
+    const product = await productManager.getProductById(req.params.id);
+    if (!product) {
+      return res.status(404).send({ error: "Product not found" });
+    }
+    res.send(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while getting the product" });
+  }
+});
+
 productRoutes.post("/", async (req, res) => {
   try {
     const newProduct = await productManager.addProduct(req.body);
@@ -83,12 +96,10 @@ productRoutes.delete("/:id", async (req, res) => {
     if (!result) {
       return res.status(404).send({ error: "Product not found" });
     }
-    res.send({ message: "Product deleted" });
+    res.send({ message: "Product deleted successfully" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .send({ error: "An error occurred while deleting the product" });
+    res.status(500).send({ error: "An error occurred while deleting the product" });
   }
 });
 

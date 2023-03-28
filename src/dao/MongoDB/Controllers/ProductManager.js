@@ -13,9 +13,7 @@ export class ProductManagerMongoDB extends mongoDbManager {
       !product.stock ||
       !product.description ||
       !product.category ||
-      !product.code ||
-      !product.status
-
+      !product.code
     ) {
       throw new Error("All fields are required");
     }
@@ -25,6 +23,7 @@ export class ProductManagerMongoDB extends mongoDbManager {
     if (!/^[0-9]+$/.test(product.stock)) {
       throw new Error("Stock must be a number");
     }
+    product.status = true;
     return await this.addElements([product]);
   }
 
@@ -53,7 +52,7 @@ export class ProductManagerMongoDB extends mongoDbManager {
     return options;
   }
 
-  async updateProduct(id, title, description, price, thumbnail, code, stock) {
+  async updateProduct(id, title, description, price, category, code, stock) {
     if (!/^[0-9]+$/.test(price)) {
       throw new Error("Price must be a number");
     }

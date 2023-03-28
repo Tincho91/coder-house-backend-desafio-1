@@ -37,30 +37,15 @@ export class CartManagerMongoDB extends mongoDbManager {
     }
   }
 
-  async addCart(cartData) {
+  async addCart() {
     try {
-      const populatedProducts = [];
-
-      for (const product of cartData.products) {
-        const fetchedProduct = await this.getProductByCode(product.code);
-
-        if (!fetchedProduct) {
-          throw new Error(`Product with code ${product.code} not found`);
-        }
-
-        populatedProducts.push({
-          productId: fetchedProduct._id,
-          code: fetchedProduct.code,
-          quantity: product.quantity,
-          price: fetchedProduct.price * product.quantity,
-        });
-      }
-
       const newCart = new this.model({
-        user: cartData.user,
-        products: populatedProducts,
+        user: {
+          email: `guest${Date.now()}@example.com`,
+        },
+        products: [],
       });
-
+  
       await newCart.save();
       return newCart;
     } catch (error) {
