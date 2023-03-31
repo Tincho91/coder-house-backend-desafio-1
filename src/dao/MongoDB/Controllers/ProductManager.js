@@ -30,8 +30,8 @@ export class ProductManagerMongoDB extends mongoDbManager {
   async getProducts(limit, page, sort, query) {
     const queryObject = query ? this.buildQueryObject(query) : {};
     const options = this.buildPaginationOptions(limit, page, sort);
-    const products = await this.getElements(queryObject, options);
-    const totalDocuments = await this.countElements(queryObject);
+    const result = await this.model.paginate(queryObject, options);
+    const { docs: products, totalDocs: totalDocuments } = result;
     return { products, totalDocuments };
   }
 

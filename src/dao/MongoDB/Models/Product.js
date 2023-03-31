@@ -1,6 +1,6 @@
 import { mongoDbManager } from "../../../database/mongoDbManager.js";
 import { Schema } from "mongoose";
-
+import mongoosePaginate from "mongoose-paginate-v2";
 
 export const productSchema = new Schema ({
     title: {
@@ -38,6 +38,8 @@ export const productSchema = new Schema ({
       default: true
     }
 })
+
+productSchema.plugin(mongoosePaginate);
 
 export class ProductManagerMongoDB extends mongoDbManager {
     constructor() {
