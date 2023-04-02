@@ -1,0 +1,9 @@
+<br class="container d-flex justify-content-center my-3">
+  {{#if user}}
+    <h1>Bienvenido, {{user.firstName}} {{user.lastName}}</h1>
+    <p>Rol: {{user.role}}</p>
+    {{> logoutButton}}
+  {{else}}
+    <p>Ya eres usuario? <a href="/api/session/login" class="btn btn-primary">Ingresá</a>, si no <a href="/api/session/register" class="btn btn-secondary">Registrate!</a></p>
+  {{/if}}
+</div>

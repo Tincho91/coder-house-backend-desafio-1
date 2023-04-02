@@ -1,0 +1,37 @@
+<div class="container d-flex justify-content-center my-3">
+    <div class="row">
+        <div class="col">
+            <form class="d-flex align-items-center">
+                <div class="me-3">
+                    <label for="limit-input" class="form-label">Limit:</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="limit-input"
+                        placeholder="Limit"
+                        min="1"
+                        step="1"
+                    />
+                </div>
+                <div class="me-3">
+                    <label for="query-input" class="form-label">Query:</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="query-input"
+                        placeholder="Query"
+                    />
+                </div>
+                <div class="me-3">
+                    <label for="sort-select" class="form-label">Sort:</label>
+                    <select class="form-select" id="sort-select">
+                        <option value="" disabled selected>Sort by price</option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

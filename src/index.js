@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 //import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -45,12 +46,17 @@ app.use(session({
   store: MongoStore.create ({
     mongoUrl: process.env.MONGODBURL,
     mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true},
-    ttl: 30,
+    ttl: 300,
   }),
   secret: process.env.SESSION_SECRET,
   resave: true, 
   saveUninitialized: true,
 }));
+// Para analizar solicitudes con contenido JSON
+app.use(bodyParser.json());
+
+// Para analizar solicitudes con datos de formularios URL-encoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
 ///////////////////////////////////////
 

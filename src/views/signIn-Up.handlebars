@@ -1,0 +1,57 @@
+<div class="container mt-5" data-action="{{action}}">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="signin-tab" href="#">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="signup-tab" href="#">Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <form id="signin-form" action="/api/session/login" method="POST">
+                        <div class="form-group">
+                            <label for="signin-email">Email address</label>
+                            <input type="email" class="form-control" id="signin-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signin-password">Password</label>
+                            <input type="password" class="form-control" id="signin-password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                    </form>
+
+                    <form id="signup-form" action="/api/session/register" method="POST" style="display:none;">
+                        <div class="form-group">
+                            <label for="signup-firstName">First Name</label>
+                            <input type="text" class="form-control" id="signup-firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-lastName">Last Name</label>
+                            <input type="text" class="form-control" id="signup-lastName" name="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-email">Email address</label>
+                            <input type="email" class="form-control" id="signup-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-age">Age</label>
+                            <input type="number" class="form-control" id="signup-age" name="age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <input type="password" class="form-control" id="signup-password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/session.js"></script>
