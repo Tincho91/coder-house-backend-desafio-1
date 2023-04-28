@@ -37,5 +37,25 @@ export class CartManagerMongoDB extends mongoDbManager {
   constructor() {
     super(process.env.MONGODBURL, "carts", cartSchema);
   }
-  //Metodos Propios
+
+  async getElements() {
+    try {
+      const carts = await this.model.find().populate('products.productId');
+      return carts;
+    } catch (error) {
+      console.error("Error fetching carts", error);
+      throw error;
+    }
+  }
+
+  async createEmptyCart(userEmail) {
+    try {
+      const newCart = new this.model({ user: { email: userEmail }, products: [] });
+      await newCart.save();
+      return newCart;
+    } catch (error) {
+      console.error("Error creating empty cart", error);
+      throw error;
+    }
+  }
 }

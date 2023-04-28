@@ -1,93 +1,91 @@
-import { mongoDbManager } from "../../../database/mongoDbManager.js";
-import { cartSchema } from "../Models/Cart.js";
-import { ProductManagerMongoDB } from "../Models/Product.js";
+import { CartManagerMongoDB } from "../Models/Cart.js";
 
-export class CartManagerMongoDB extends mongoDbManager {
-  constructor() {
-    super(process.env.MONGODBURL, "carts", cartSchema);
-    this.productManager = new ProductManagerMongoDB();
+const cartManager = new CartManagerMongoDB();
+
+export const getAllCarts = async (req, res) => {
+  try {
+    const carts = await cartManager.getElements();
+    res.render("carts", { carts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while fetching the carts" });
   }
+};
 
-  async getProductByCode(res, code) {
-    try {
-      const product = await this.productManager.model.findOne({ code: code });
-      return product;
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while getting the product" });
+export const addCart = async (req, res) => {
+  try {
+    const newCart = await cartManager.addElements([req.body]);
+    res.status(201).send({ message: "Cart created successfully", cart: newCart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while creating the cart" });
+  }
+};
+
+export const getCartById = async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const cart = await cartManager.getElementById(cartId);
+
+    if (!cart) {
+      return res.status(404).send({ error: "Cart not found" });
     }
-  }
 
-  async getAllCarts(res) {
-    try {
-      const carts = await this.model.find().populate("products.productId");
-      return carts;
-    } catch (error) {
-      console.log("Error fetching carts", error);
-      res.status(500).json({ message: "An error occurred while fetching carts" });
-    }
-  }
+    const total = cart.products.reduce((sum, product) => sum + product.price, 0);
 
-  async getCartById(res, cartId) {
-    try {
-      const cart = await this.model.findById(cartId).populate("products.productId");
-      return cart;
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while getting the cart" });
-    }
+    res.render("cart", {
+      userEmail: cart.user.email,
+      cartProducts: cart.products,
+      total: total
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while getting the cart" });
   }
+};
 
-  async addCart(res) {
-    try {
-      const newCart = new this.model({
-        user: {
-          email: `guest${Date.now()}@example.com`,
-        },
-        products: [],
-      });
-  
-      await newCart.save();
-      return newCart;
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while creating the cart" });
-    }
+export const updateCart = async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const products = req.body.products;
+    await cartManager.updateElement(cid, { products });
+    res.send({ message: "Cart updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while updating the cart" });
   }
+};
 
-  async updateCart(res, cid, products) {
-    try {
-      await this.updateOne({ _id: cid }, { $set: { products: products } });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while updating the cart" });
-    }
+export const deleteCart = async (req, res) => {
+  try {
+    const { cid } = req.params;
+    await cartManager.removeElement(cid);
+    res.send({ message: "Cart cleared successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while clearing the cart" });
   }
+};
 
-  async updateProductQuantity(res, cid, pid, quantity) {
-    try {
-      await this.updateOne({ _id: cid, "products.product": pid }, { $set: { "products.$.quantity": quantity } });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while updating the product quantity" });
-    }
+export const updateProductQuantity = async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+    await cartManager.updateProductQuantity(cid, pid, quantity);
+    res.send({ message: "Product quantity updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while updating the product quantity" });
   }
+};
 
-  async deleteCart(res, cid) {
-    try {
-      await this.updateOne({ _id: cid }, { $set: { products: [] } });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while deleting the cart" });
-    }
+export const deleteProductFromCart = async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    await cartManager.deleteProductFromCart(cid, pid);
+    res.send({ message: "Product removed from cart successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while removing the product from the cart" });
   }
-
-  async deleteProductFromCart(res, cid, pid) {
-    try {
-      await this.updateOne({ _id: cid }, { $pull: { products: { product: pid } } });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "An error occurred while deleting the product from the cart" });
-    }
-  }
-}
+};
